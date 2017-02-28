@@ -13,7 +13,7 @@ User.find().sort('username').exec(function(err, users) {
   });
 });
 
-/* GET user by ID */
+/* GET user by username */
 
 router.get('/:username', loadUser, function(req, res, next) {
  res.send(req.user);
@@ -33,12 +33,51 @@ router.post('/', function(req, res, next) {
   });
 });
 
+/* PATCH update user */
+router.patch('/:username', loadUser, function(req, res, next) {
+
+  // Update properties present in the request body
+  if (req.body.username !== undefined) {
+    req.user.username = req.body.username;
+  }
+  if (req.body.firstName !== undefined) {
+    req.user.firstName = req.body.firstName;
+  }
+  if (req.body.lastName !== undefined) {
+    req.user.lastName = req.body.lastName;
+  }
+
+  req.user.save(function(err, savedUser) {
+    if (err) {
+      return next(err);
+    }
+    res.send(savedUser);
+  });
+});
+
+/* PUT update user */
+router.put('/:username', loadUser, function(req, res, next) {
+
+  // Update all properties (regardless of whether they are in the request body or not)
+  req.user.username = req.body.username;
+  req.user.firstName = req.body.firstName;
+  req.user.lastName = req.body.lastName;
+
+  req.user.save(function(err, savedPerson) {
+    if (err) {
+      return next(err);
+    }
+
+    res.send(savedPerson);
+  });
+});
+
 function loadUser(req, res, next) {
   User.findOne({"username" : req.params.username}).exec(function(err, user) {
     if (err) {
       return next(err);
     } else if (!user) {
-      return res.status(404).send('No user found with the ID :' + req.params.id);
+      return res.status(404).send('No user found with the username : ' + req.params.username);
     }
     req.user = user;
     next();
