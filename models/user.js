@@ -27,7 +27,9 @@ const userSchema = new Schema({
     },
     
     // date de la création de l'utilisateur
-    date: { type: Date, default: Date.now  }
+    date: { type: Date, 
+           default: Date.now, 
+           required: true }
     
 });
 
