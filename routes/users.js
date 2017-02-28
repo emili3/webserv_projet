@@ -1,101 +1,94 @@
 var express = require('express');
 var router = express.Router();
+const User = require('../models/user');
 const Issue = require('../models/issue');
 
-/* GET issue listing. */
+/* GET users listing. */
 router.get('/', function(req, res, next) {
-Issue.find().sort('status').exec(function(err, issues) {
+User.find().sort('username').exec(function(err, users) {
     if (err) {
       return next(err);
     }
-    res.send(issues);
+    res.send(users);
   });
 });
 
-/* GET issue by id */
+/* GET user by username */
 
-router.get('/:id', loadIssue, function(req, res, next) {
- res.send(req.issue);
+router.get('/:username', loadUser, function(req, res, next) {
+ res.send(req.user);
 });
 
-/* POST new issue */
+/* POST new user */
 router.post('/', function(req, res, next) {
   // Create a new document from the JSON in the request body
-  const newIssue = new Issue(req.body);
-  
-  newIssue.status = "new";
-  newIssue.createdAt = Date.now();
+  const newUser = new User(req.body);
+
+  newUser.createdAt = Date.now();
   // Save that document
-  newIssue.save(function(err, savedIssue) {
+  newUser.save(function(err, savedUser) {
     if (err) {
       return next(err);
     }
     // Send the saved document in the response
-    res.send(savedIssue);
+    res.send(savedUser);
   });
 });
 
-/* PATCH update issue */
-router.patch('/:id', loadIssue, function(req, res, next) {
+/* PATCH update user */
+router.patch('/:username', loadUser, function(req, res, next) {
 
   // Update properties present in the request body
-  if (req.body.status !== undefined) {
-    req.issue.status = req.body.status;
-  }
-
-  if (req.body.description !== undefined) {
-    req.issue.description = req.body.description;
-  }
-
-  if (req.body.imageUrl !== undefined) {
-    req.issue.imageUrl = req.body.imageUrl;
-  }
-
-  if (req.body.latitude !== undefined) {
-    req.issue.latitude = req.body.latitude;
-  }
-
-  if (req.body.longitude !== undefined) {
-    req.issue.longitude = req.body.longitude;
-  }
-
-  if (req.body.tags !== undefined) {
-    req.issue.tags = req.body.tags;
-  }
-
   if (req.body.username !== undefined) {
-    req.issue.username = req.body.username;
+    req.user.username = req.body.username;
+  }
+  if (req.body.firstName !== undefined) {
+    req.user.firstName = req.body.firstName;
+  }
+  if (req.body.lastName !== undefined) {
+    req.user.lastName = req.body.lastName;
+  }
+  if (req.body.role !== undefined) {
+    req.user.role = req.body.role;
   }
 
-  req.issue.updatedAt = Date.now();
-
-  req.issue.save(function(err, savedIssue) {
+  req.user.save(function(err, savedUser) {
     if (err) {
       return next(err);
     }
-    res.send(savedIssue);
+    res.send(savedUser);
   });
 });
 
-/* DELETE delete issue */
-router.delete('/:id', loadIssue, function(req, res, next) {
-
-  req.issue.remove(function(err) {
+/* DELETE delete user */
+router.delete('/:username', loadUser, function(req, res, next) {
+  // Check if an issues exists before deleting
+  Issue.findOne({ user: req.user.username }).exec(function(err, user) {
     if (err) {
       return next(err);
+    } else if (user) {
+      // Do not delete if any issues is posted by this user
+      return res.status(409).type('text').send(`Cannot delete user ${req.user.username} because issues are posted by him`)
     }
-    res.sendStatus(204);
+
+    req.user.remove(function(err) {
+      if (err) {
+        return next(err);
+      }
+      res.sendStatus(204);
+    });
   });
 });
 
-function loadIssue(req, res, next) {
-  Issue.findOne({"_id" : req.params.id}).exec(function(err, issue) {
+
+function loadUser(req, res, next) {
+  User.findOne({"username" : req.params.username}).exec(function(err, user) {
     if (err) {
       return next(err);
-    } else if (!issue) {
-      return res.status(404).send('No issue found with the ID : ' + req.params.id);
+    } else if (!user) {
+      return res.status(404).send('No user found with the username : ' + req.params.username);
     }
-    req.issue = issue;
+    req.user = user;
     next();
   });
 }
