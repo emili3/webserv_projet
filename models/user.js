@@ -4,7 +4,6 @@ const Schema = mongoose.Schema;
 const userSchema = new Schema({
 
     // username entre 2 et 20 caractères
-    
     username: {
     type: String, // Type validation
     required: true,
@@ -27,7 +26,7 @@ const userSchema = new Schema({
     maxlength: [ 20, 'Name is too long' ] // Maximum length
   },
     
-    
+    // role de l'utilisateur
     role: {
     type: String,
     required: true, 
@@ -35,7 +34,10 @@ const userSchema = new Schema({
     },
     
     // date de la création de l'utilisateur
-    date: { type: Date, default: Date.now  }
+    date: {
+    type: Date,
+    default: Date.now
+    }
     
 });
 

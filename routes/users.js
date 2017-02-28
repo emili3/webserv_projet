@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const User = require('../models/user');
-
+const Issue = require('../models/issue');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -71,6 +71,27 @@ router.put('/:username', loadUser, function(req, res, next) {
     res.send(savedPerson);
   });
 });
+
+/* DELETE delete user */
+router.delete('/:username', loadUser, function(req, res, next) {
+  // Check if an issues exists before deleting
+  Issue.findOne({ user: req.user.username }).exec(function(err, user) {
+    if (err) {
+      return next(err);
+    } else if (user) {
+      // Do not delete if any issues is posted by this user
+      return res.status(409).type('text').send(`Cannot delete user ${req.user.username} because issues are posted by him`)
+    }
+
+    req.user.remove(function(err) {
+      if (err) {
+        return next(err);
+      }
+      res.sendStatus(204);
+    });
+  });
+});
+
 
 function loadUser(req, res, next) {
   User.findOne({"username" : req.params.username}).exec(function(err, user) {

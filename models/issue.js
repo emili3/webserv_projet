@@ -36,17 +36,16 @@ const issueSchema = new Schema({
             required: true}],
     
     // ajouter validation si existe
-    user:{
+    username:{
         type: String,
         required: true,
         
-         validate: {
-          validator: function(userID, callback) {
-            mongoose.model("User").findOne({_id: userID}, function(err, result){
-               callback(!err && result);
-            });
-          },
-          message: 'User exist'
+        validate: {
+            validator: function(userID, callback) {
+                mongoose.model("User").findOne({username: userID}, function(err, result){
+                   callback(!err && result);
+                });
+            }
         }
     },
     
