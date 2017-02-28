@@ -17,17 +17,6 @@ var issues = require('./routes/issues');
 
 var app = express();
 
-
-
-app.use('/hello', function hello(req, res, next) {
-  res.send('world');
-});
-
-app.post('/ping', function ping(req, res, next) {
-  res.send('pong');
-});
-
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -56,7 +45,6 @@ app.use(function(req, res, next) {
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
-  console.log(err);
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
   // render the error page
