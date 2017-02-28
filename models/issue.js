@@ -39,14 +39,15 @@ const issueSchema = new Schema({
     user:{
         type: String,
         required: true,
-        /*validate: {
-            // Returns true if the name is valid (in lower case)
-            validator: function(userExist) {
-                return value.toLowerCase() == value;
-            },
-            // Custom error message
-            message: '{VALUE} is not in lower case'
-        }*/
+        
+         validate: {
+          validator: function(userID, callback) {
+            User.find({username: value}, function(err, id){
+               callback(id.length == 0);
+            });
+          },
+          message: 'User exist'
+        }
     },
     
     createdAt:{
