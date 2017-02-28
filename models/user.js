@@ -34,7 +34,7 @@ const userSchema = new Schema({
     },
     
     // date de la création de l'utilisateur
-    date: {
+    createdAt: {
     type: Date,
     default: Date.now
     }

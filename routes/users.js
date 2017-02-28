@@ -23,6 +23,8 @@ router.get('/:username', loadUser, function(req, res, next) {
 router.post('/', function(req, res, next) {
   // Create a new document from the JSON in the request body
   const newUser = new User(req.body);
+
+  newUser.createdAt = Date.now();
   // Save that document
   newUser.save(function(err, savedUser) {
     if (err) {
@@ -46,29 +48,15 @@ router.patch('/:username', loadUser, function(req, res, next) {
   if (req.body.lastName !== undefined) {
     req.user.lastName = req.body.lastName;
   }
+  if (req.body.role !== undefined) {
+    req.user.role = req.body.role;
+  }
 
   req.user.save(function(err, savedUser) {
     if (err) {
       return next(err);
     }
     res.send(savedUser);
-  });
-});
-
-/* PUT update user */
-router.put('/:username', loadUser, function(req, res, next) {
-
-  // Update all properties (regardless of whether they are in the request body or not)
-  req.user.username = req.body.username;
-  req.user.firstName = req.body.firstName;
-  req.user.lastName = req.body.lastName;
-
-  req.user.save(function(err, savedPerson) {
-    if (err) {
-      return next(err);
-    }
-
-    res.send(savedPerson);
   });
 });
 
