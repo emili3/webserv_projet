@@ -42,8 +42,8 @@ const issueSchema = new Schema({
         
          validate: {
           validator: function(userID, callback) {
-            User.find({username: value}, function(err, id){
-               callback(id.length == 0);
+            User.findOne({_id: value}, function(err, result){
+               callback(!err && result);
             });
           },
           message: 'User exist'
