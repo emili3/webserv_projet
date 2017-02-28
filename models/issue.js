@@ -42,7 +42,7 @@ const issueSchema = new Schema({
         
          validate: {
           validator: function(userID, callback) {
-            User.findOne({_id: value}, function(err, result){
+            mongoose.model("User").findOne({_id: userID}, function(err, result){
                callback(!err && result);
             });
           },
