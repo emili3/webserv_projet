@@ -13,6 +13,12 @@ User.find().sort('name').exec(function(err, users) {
   });
 });
 
+/* GET user by ID */
+
+router.get('/:username', loadUser, function(req, res, next) {
+ res.send(req.user);
+});
+
 /* POST new user */
 router.post('/', function(req, res, next) {
   // Create a new document from the JSON in the request body
@@ -26,5 +32,17 @@ router.post('/', function(req, res, next) {
     res.send(savedUser);
   });
 });
+
+function loadUser(req, res, next) {
+  User.findOne({"username" : req.params.username}).exec(function(err, user) {
+    if (err) {
+      return next(err);
+    } else if (!user) {
+      return res.status(404).send('No user found with the ID :' + req.params.id);
+    }
+    req.user = user;
+    next();
+  });
+}
 
 module.exports = router;
