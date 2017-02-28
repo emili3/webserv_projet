@@ -12,6 +12,8 @@ mongoose.set('debug', true);
 
 var index = require('./routes/index');
 var users = require('./routes/users');
+var issues = require('./routes/issues');
+
 
 var app = express();
 

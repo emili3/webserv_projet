@@ -38,7 +38,15 @@ const issueSchema = new Schema({
     // ajouter validation si existe
     user:{
         type: String,
-        required: true
+        required: true,
+        /*validate: {
+            // Returns true if the name is valid (in lower case)
+            validator: function(userExist) {
+                return value.toLowerCase() == value;
+            },
+            // Custom error message
+            message: '{VALUE} is not in lower case'
+        }*/
     },
     
     createdAt:{
