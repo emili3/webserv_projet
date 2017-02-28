@@ -35,7 +35,7 @@ const issueSchema = new Schema({
     tags:[{ type: String,
             required: true}],
     
-    // ajouter validation si existe
+    // Validation pour vérifier si le user existe
     user:{
         type: String,
         required: true,

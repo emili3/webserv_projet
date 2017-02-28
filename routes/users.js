@@ -33,6 +33,7 @@ router.post('/', function(req, res, next) {
   });
 });
 
+
 function loadUser(req, res, next) {
   User.findOne({"username" : req.params.username}).exec(function(err, user) {
     if (err) {
