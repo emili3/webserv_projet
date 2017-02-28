@@ -4,7 +4,7 @@ const Issue = require('../models/issue');
 
 /* GET issue listing. */
 router.get('/', function(req, res, next) {
-Issue.find().sort('description').exec(function(err, users) {
+Issue.find().sort('status').exec(function(err, issues) {
     if (err) {
       return next(err);
     }
