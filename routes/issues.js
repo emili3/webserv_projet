@@ -35,7 +35,7 @@ Issue.find().sort('status').exec(function(err, issues) {
 /***************** GET issue by id *****************/
 
 /**
- * @api {get} /issue/:id Request a issue by id
+ * @api {get} /issue/:id Request an issue by id
  * @apiName GetIssue
  * @apiGroup Issue
  *
