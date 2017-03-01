@@ -14,9 +14,20 @@ User.find().sort('username').exec(function(err, users) {
 });
 
 /* GET user by username */
-
 router.get('/:username', loadUser, function(req, res, next) {
  res.send(req.user);
+});
+
+/* GET user by username with list of posted issues*/
+router.get('/:username/issues', loadUser, function(req, res, next) {
+  Issue.find({username: req.user.username}).exec(function(err,issues){
+    if (err) {
+      return next(err);
+    }
+    else{
+      res.send(issues);
+    }
+  });
 });
 
 /* POST new user */
@@ -63,10 +74,10 @@ router.patch('/:username', loadUser, function(req, res, next) {
 /* DELETE delete user */
 router.delete('/:username', loadUser, function(req, res, next) {
   // Check if an issues exists before deleting
-  Issue.findOne({ user: req.user.username }).exec(function(err, user) {
+  Issue.findOne({ username: req.user.username }).exec(function(err, issue) {
     if (err) {
       return next(err);
-    } else if (user) {
+    } else if (issue) {
       // Do not delete if any issues is posted by this user
       return res.status(409).type('text').send(`Cannot delete user ${req.user.username} because issues are posted by him`)
     }
