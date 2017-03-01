@@ -16,7 +16,7 @@ const Issue = require('../models/issue');
  * @apiSuccess {String} imageUrl A URL to a picture of the issue
  * @apiSuccess {Number} latitude Latitude (part of the coordinates indicating where the issue is)
  * @apiSuccess {Number} longitude Longitude (part of the coordinates indicating where the issue is)
- * @apiSuccess {Array of Strings} tags Tags describe the issue (e.g. "accident", "broken")
+ * @apiSuccess {String[]} tags Tags describe the issue (e.g. "accident", "broken")
  * @apiSuccess {String} username The user who reported the issue
  * @apiSuccess {Date} createAt The date at which the issue was reported
  * @apiSuccess {Date} updateAt The date at which the issue was last modified
@@ -46,7 +46,7 @@ Issue.find().sort('status').exec(function(err, issues) {
  * @apiSuccess {String} imageUrl A URL to a picture of the issue
  * @apiSuccess {Number} latitude Latitude (part of the coordinates indicating where the issue is)
  * @apiSuccess {Number} longitude Longitude (part of the coordinates indicating where the issue is)
- * @apiSuccess {Array of Strings} tags Tags describe the issue (e.g. "accident", "broken")
+ * @apiSuccess {String[]} tags Tags describe the issue (e.g. "accident", "broken")
  * @apiSuccess {String} username The user who reported the issue
  * @apiSuccess {Date} createAt The date at which the issue was reported
  * @apiSuccess {Date} updateAt The date at which the issue was last modified
@@ -69,7 +69,7 @@ router.get('/:id', loadIssue, function(req, res, next) {
  * @apiSuccess {String} imageUrl A URL to a picture of the issue
  * @apiSuccess {Number} latitude Latitude (part of the coordinates indicating where the issue is)
  * @apiSuccess {Number} longitude Longitude (part of the coordinates indicating where the issue is)
- * @apiSuccess {Array of Strings} tags Tags describe the issue (e.g. "accident", "broken")
+ * @apiSuccess {String[]} tags Tags describe the issue (e.g. "accident", "broken")
  * @apiSuccess {String} username The user who reported the issue
  * @apiSuccess {Date} createAt The date at which the issue was reported
  * @apiSuccess {Date} updateAt The date at which the issue was last modified
@@ -106,7 +106,7 @@ router.post('/', function(req, res, next) {
  * @apiSuccess {String} imageUrl A URL to a picture of the issue
  * @apiSuccess {Number} latitude Latitude (part of the coordinates indicating where the issue is)
  * @apiSuccess {Number} longitude Longitude (part of the coordinates indicating where the issue is)
- * @apiSuccess {Array of Strings} tags Tags describe the issue (e.g. "accident", "broken")
+ * @apiSuccess {String[]} tags Tags describe the issue (e.g. "accident", "broken")
  * @apiSuccess {String} username The user who reported the issue
  * @apiSuccess {Date} createAt The date at which the issue was reported
  * @apiSuccess {Date} updateAt The date at which the issue was last modified
@@ -179,19 +179,7 @@ router.delete('/:id', loadIssue, function(req, res, next) {
 });
 
 
-/**
- * @api {findOne} /users/:id find user who created the issue
- * @apiName findOne
- * @apiGroup Issue
- *
- * @apiParam {Number} id Unique identifier of the user
- *
- * @apiSuccess {String} username Username of the user
- * @apiSuccess {String} firstName First name of the user
- * @apiSuccess {String} lastName Last name of the user
- * @apiSuccess {String} role Role of the user "citizen" or "manager"
- * @apiSuccess {Date} createdAt Date of creation of the user
- */
+// find user who created the issue
 
 function loadIssue(req, res, next) {
   Issue.findOne({"_id" : req.params.id}).exec(function(err, issue) {
