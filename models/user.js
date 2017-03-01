@@ -8,22 +8,22 @@ const userSchema = new Schema({
     type: String, // Type validation
     required: true,
     unique: true,
-    minlength: [ 2, 'Name is too short' ], // Minimum length
-    maxlength: [ 20, 'Name is too long' ] // Maximum length
+    minlength: [ 2, 'username is too short' ], // Minimum length
+    maxlength: [ 20, 'username is too long' ] // Maximum length
   },
 
     // firstName entre 2 et 20 caractères
     firstName: {
     type: String, // Type validation 
-    minlength: [ 2, 'Name is too short' ], // Minimum length
-    maxlength: [ 20, 'Name is too long' ] // Maximum length
+    minlength: [ 2, 'firstName is too short' ], // Minimum length
+    maxlength: [ 20, 'firstName is too long' ] // Maximum length
   },
 
     // lastName entre 2 et 20 caractères
     lastName: {
     type: String, // Type validation 
-    minlength: [ 2, 'Name is too short' ], // Minimum length
-    maxlength: [ 20, 'Name is too long' ] // Maximum length
+    minlength: [ 2, 'minlength is too short' ], // Minimum length
+    maxlength: [ 20, 'minlength is too long' ] // Maximum length
   },
     
     // role de l'utilisateur
