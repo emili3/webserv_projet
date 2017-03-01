@@ -8,7 +8,7 @@ const Issue = require('../models/issue');
 /**
  * @api {get} /issues/ Request all issues
  * @apiName GetIssues
- * @apiGroup Issues
+ * @apiGroup Issue
  *
  *
  * @apiSuccess {String} status Status of the issue "new", "inProgress", "canceled" or "completed"
