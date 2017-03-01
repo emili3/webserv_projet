@@ -2,6 +2,25 @@ var express = require('express');
 var router = express.Router();
 const Issue = require('../models/issue');
 
+
+/**
+ * @api {get} /issue/ Request a list of issue
+ * @apiName GetIssues
+ * @apiGroup Issue
+ *
+ *
+ * @apiSuccess {String} status Status of the issue "new", "inProgress", "canceled" or "completed"
+ * @apiSuccess {String} description A detailed description of the issue
+ * @apiSuccess {String} imageUrl A URL to a picture of the issue
+ * @apiSuccess {Number} latitude Latitude (part of the coordinates indicating where the issue is)
+ * @apiSuccess {Number} longitude Longitude (part of the coordinates indicating where the issue is)
+ * @apiSuccess {String[]} tags Tags describe the issue (e.g. "accident", "broken")
+ * @apiSuccess {String} username The user who reported the issue
+ * @apiSuccess {Date} createAt The date at which the issue was reported
+ * @apiSuccess {Date} updateAt The date at which the issue was last modified
+ */
+
+
 /* GET issue listing. */
 router.get('/', function(req, res, next) {
 Issue.find().sort('status').exec(function(err, issues) {
@@ -12,11 +31,47 @@ Issue.find().sort('status').exec(function(err, issues) {
   });
 });
 
+/**
+ * @api {get} /issue/:id Request an issue by id
+ * @apiName GetIssue
+ * @apiGroup Issue
+ *
+ * @apiParam {Number} id Unique identifier of the issue
+ *
+ * @apiSuccess {String} status Status of the issue "new", "inProgress", "canceled" or "completed"
+ * @apiSuccess {String} description A detailed description of the issue
+ * @apiSuccess {String} imageUrl A URL to a picture of the issue
+ * @apiSuccess {Number} latitude Latitude (part of the coordinates indicating where the issue is)
+ * @apiSuccess {Number} longitude Longitude (part of the coordinates indicating where the issue is)
+ * @apiSuccess {String[]} tags Tags describe the issue (e.g. "accident", "broken")
+ * @apiSuccess {String} username The user who reported the issue
+ * @apiSuccess {Date} createAt The date at which the issue was reported
+ * @apiSuccess {Date} updateAt The date at which the issue was last modified
+ */
+
 /* GET issue by id */
 
 router.get('/:id', loadIssue, function(req, res, next) {
  res.send(req.issue);
 });
+
+/**
+ * @api {post} /issue/ Create a new issue
+ * @apiName PostIssue
+ * @apiGroup Issue
+ *
+ * @apiParam {Number} id Unique identifier of the issue
+ *
+ * @apiSuccess {String} status Status of the issue "new", "inProgress", "canceled" or "completed"
+ * @apiSuccess {String} description A detailed description of the issue
+ * @apiSuccess {String} imageUrl A URL to a picture of the issue
+ * @apiSuccess {Number} latitude Latitude (part of the coordinates indicating where the issue is)
+ * @apiSuccess {Number} longitude Longitude (part of the coordinates indicating where the issue is)
+ * @apiSuccess {String[]} tags Tags describe the issue (e.g. "accident", "broken")
+ * @apiSuccess {String} username The user who reported the issue
+ * @apiSuccess {Date} createAt The date at which the issue was reported
+ * @apiSuccess {Date} updateAt The date at which the issue was last modified
+ */
 
 /* POST new issue */
 router.post('/', function(req, res, next) {
@@ -34,6 +89,24 @@ router.post('/', function(req, res, next) {
     res.send(savedIssue);
   });
 });
+
+/**
+ * @api {patch} /issue/:id Modify a selected issue
+ * @apiName PatchIssue
+ * @apiGroup Issue
+ *
+ * @apiParam {Number} id Unique identifier of the issue
+ *
+ * @apiSuccess {String} status Status of the issue "new", "inProgress", "canceled" or "completed"
+ * @apiSuccess {String} description A detailed description of the issue
+ * @apiSuccess {String} imageUrl A URL to a picture of the issue
+ * @apiSuccess {Number} latitude Latitude (part of the coordinates indicating where the issue is)
+ * @apiSuccess {Number} longitude Longitude (part of the coordinates indicating where the issue is)
+ * @apiSuccess {String[]} tags Tags describe the issue (e.g. "accident", "broken")
+ * @apiSuccess {String} username The user who reported the issue
+ * @apiSuccess {Date} createAt The date at which the issue was reported
+ * @apiSuccess {Date} updateAt The date at which the issue was last modified
+ */
 
 /* PATCH update issue */
 router.patch('/:id', loadIssue, function(req, res, next) {
@@ -76,6 +149,24 @@ router.patch('/:id', loadIssue, function(req, res, next) {
     res.send(savedIssue);
   });
 });
+
+/**
+ * @api {delete} /issue/:id Delete a selected issue
+ * @apiName DeleteIssue
+ * @apiGroup Issue
+ *
+ * @apiParam {Number} id Unique identifier of the issue
+ *
+ * @apiSuccess {String} status Status of the issue "new", "inProgress", "canceled" or "completed"
+ * @apiSuccess {String} description A detailed description of the issue
+ * @apiSuccess {String} imageUrl A URL to a picture of the issue
+ * @apiSuccess {Number} latitude Latitude (part of the coordinates indicating where the issue is)
+ * @apiSuccess {Number} longitude Longitude (part of the coordinates indicating where the issue is)
+ * @apiSuccess {String[]} tags Tags describe the issue (e.g. "accident", "broken")
+ * @apiSuccess {String} username The user who reported the issue
+ * @apiSuccess {Date} createAt The date at which the issue was reported
+ * @apiSuccess {Date} updateAt The date at which the issue was last modified
+ */
 
 /* DELETE delete issue */
 router.delete('/:id', loadIssue, function(req, res, next) {
