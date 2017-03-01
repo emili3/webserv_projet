@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 const Issue = require('../models/issue');
+const mongoose = require('mongoose');
+const ObjectId = mongoose.Types.ObjectId;
 
 /* GET issue listing. */
 router.get('/', function(req, res, next) {
@@ -89,7 +91,10 @@ router.delete('/:id', loadIssue, function(req, res, next) {
 });
 
 function loadIssue(req, res, next) {
-  Issue.findOne({"_id" : req.params.id}).exec(function(err, issue) {
+  if (!ObjectId.isValid(req.params.id)) {
+    return res.status(404).send('No issue found with the ID : ' + req.params.id);
+  }
+  Issue.findById(req.params.id).exec(function(err, issue) {
     if (err) {
       return next(err);
     } else if (!issue) {

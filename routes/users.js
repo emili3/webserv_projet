@@ -42,6 +42,7 @@ router.post('/', function(req, res, next) {
       return next(err);
     }
     // Send the saved document in the response
+    res.status(201);
     res.send(savedUser);
   });
 });
@@ -50,9 +51,6 @@ router.post('/', function(req, res, next) {
 router.patch('/:username', loadUser, function(req, res, next) {
 
   // Update properties present in the request body
-  if (req.body.username !== undefined) {
-    req.user.username = req.body.username;
-  }
   if (req.body.firstName !== undefined) {
     req.user.firstName = req.body.firstName;
   }
