@@ -1,12 +1,32 @@
 var express = require('express');
 var router = express.Router();
 const Issue = require('../models/issue');
+
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 
-/* GET issue listing. */
+
+/***************** GET issue listing. *****************/
+
+/**
+ * @api {get} /issues/ Request all issues
+ * @apiName GetIssues
+ * @apiGroup Issue
+ *
+ *
+ * @apiSuccess {String} status Status of the issue "new", "inProgress", "canceled" or "completed"
+ * @apiSuccess {String} description A detailed description of the issue
+ * @apiSuccess {String} imageUrl A URL to a picture of the issue
+ * @apiSuccess {Number} latitude Latitude (part of the coordinates indicating where the issue is)
+ * @apiSuccess {Number} longitude Longitude (part of the coordinates indicating where the issue is)
+ * @apiSuccess {String[]} tags Tags describe the issue (e.g. "accident", "broken")
+ * @apiSuccess {String} username The user who reported the issue
+ * @apiSuccess {Date} createAt The date at which the issue was reported
+ * @apiSuccess {Date} updateAt The date at which the issue was last modified
+ */
+
 router.get('/', function(req, res, next) {
-Issue.find().sort('status').exec(function(err, issues) {
+  Issue.find().sort('status').exec(function(err, issues) {
     if (err) {
       return next(err);
     }
@@ -14,13 +34,50 @@ Issue.find().sort('status').exec(function(err, issues) {
   });
 });
 
-/* GET issue by id */
+
+/***************** GET issue by id *****************/
+
+/**
+ * @api {get} /issue/:id Request an issue by id
+ * @apiName GetIssue
+ * @apiGroup Issue
+ *
+ * @apiParam {Number} id Unique identifier of the issue
+ *
+ * @apiSuccess {String} status Status of the issue "new", "inProgress", "canceled" or "completed"
+ * @apiSuccess {String} description A detailed description of the issue
+ * @apiSuccess {String} imageUrl A URL to a picture of the issue
+ * @apiSuccess {Number} latitude Latitude (part of the coordinates indicating where the issue is)
+ * @apiSuccess {Number} longitude Longitude (part of the coordinates indicating where the issue is)
+ * @apiSuccess {String[]} tags Tags describe the issue (e.g. "accident", "broken")
+ * @apiSuccess {String} username The user who reported the issue
+ * @apiSuccess {Date} createAt The date at which the issue was reported
+ * @apiSuccess {Date} updateAt The date at which the issue was last modified
+ */
 
 router.get('/:id', loadIssue, function(req, res, next) {
  res.send(req.issue);
 });
 
-/* POST new issue */
+
+/***************** POST new issue  *****************/
+
+/**
+ * @api {post} /issues/ Create an issue
+ * @apiName PostIssue
+ * @apiGroup Issue
+ *
+ * @apiSuccess {String} status Status of the issue "new", "inProgress", "canceled" or "completed"
+ * @apiSuccess {String} description A detailed description of the issue
+ * @apiSuccess {String} imageUrl A URL to a picture of the issue
+ * @apiSuccess {Number} latitude Latitude (part of the coordinates indicating where the issue is)
+ * @apiSuccess {Number} longitude Longitude (part of the coordinates indicating where the issue is)
+ * @apiSuccess {String[]} tags Tags describe the issue (e.g. "accident", "broken")
+ * @apiSuccess {String} username The user who reported the issue
+ * @apiSuccess {Date} createAt The date at which the issue was reported
+ * @apiSuccess {Date} updateAt The date at which the issue was last modified
+ */
+
 router.post('/', function(req, res, next) {
   // Create a new document from the JSON in the request body
   const newIssue = new Issue(req.body);
@@ -37,7 +94,26 @@ router.post('/', function(req, res, next) {
   });
 });
 
-/* PATCH update issue */
+
+/***************** PATCH update issue  *****************/
+
+/**
+ * @api {patch} /issues/:id Update an issue
+ * @apiName PostIssue
+ * @apiGroup Issue
+ *
+ * @apiParam {id} id Unique identifier of the issue
+ *
+ * @apiSuccess {String} status Status of the issue "new", "inProgress", "canceled" or "completed"
+ * @apiSuccess {String} description A detailed description of the issue
+ * @apiSuccess {String} imageUrl A URL to a picture of the issue
+ * @apiSuccess {Number} latitude Latitude (part of the coordinates indicating where the issue is)
+ * @apiSuccess {Number} longitude Longitude (part of the coordinates indicating where the issue is)
+ * @apiSuccess {String[]} tags Tags describe the issue (e.g. "accident", "broken")
+ * @apiSuccess {String} username The user who reported the issue
+ * @apiSuccess {Date} createAt The date at which the issue was reported
+ * @apiSuccess {Date} updateAt The date at which the issue was last modified
+ */
 router.patch('/:id', loadIssue, function(req, res, next) {
 
   // Update properties present in the request body
@@ -73,13 +149,28 @@ router.patch('/:id', loadIssue, function(req, res, next) {
 
   req.issue.save(function(err, savedIssue) {
     if (err) {
+                    console.log("je suis là");
+
       return next(err);
+
     }
     res.send(savedIssue);
   });
 });
 
-/* DELETE delete issue */
+
+/***************** DELETE delete issuee  *****************/
+
+/**
+ * @api {delete} /issues/:id Delete an issue
+ * @apiName DeleteIssue
+ * @apiGroup Issue
+ *
+ * @apiParam {Number} id Unique identifier of the issue
+ *
+ * @apiSuccess status 204 issue deleted
+ */
+
 router.delete('/:id', loadIssue, function(req, res, next) {
 
   req.issue.remove(function(err) {
@@ -89,6 +180,9 @@ router.delete('/:id', loadIssue, function(req, res, next) {
     res.sendStatus(204);
   });
 });
+
+
+// find user who created the issue
 
 function loadIssue(req, res, next) {
   if (!ObjectId.isValid(req.params.id)) {
@@ -105,4 +199,4 @@ function loadIssue(req, res, next) {
   });
 }
 
-module.exports = router;
+module.exports = router
