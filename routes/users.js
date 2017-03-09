@@ -44,6 +44,21 @@ router.get('/:username', loadUser, function(req, res, next) {
  res.send(req.user);
 });
 
+/**
+ * @api {get} /users/:username/issues Request a user's list of posted issues
+ * @apiName GetUser
+ * @apiGroup User
+ *
+ * @apiSuccess {String} status Status of the issue "new", "inProgress", "canceled" or "completed"
+ * @apiSuccess {String} description A detailed description of the issue
+ * @apiSuccess {String} imageUrl A URL to a picture of the issue
+ * @apiSuccess {Number} latitude Latitude (part of the coordinates indicating where the issue is)
+ * @apiSuccess {Number} longitude Longitude (part of the coordinates indicating where the issue is)
+ * @apiSuccess {String[]} tags Tags describe the issue (e.g. "accident", "broken")
+ * @apiSuccess {String} username The user who reported the issue
+ * @apiSuccess {Date} createAt The date at which the issue was reported
+ * @apiSuccess {Date} updateAt The date at which the issue was last modified
+ */
 
 /* GET user by username with list of posted issues*/
 router.get('/:username/issues', loadUser, function(req, res, next) {

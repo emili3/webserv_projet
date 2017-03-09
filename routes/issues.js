@@ -118,7 +118,9 @@ router.patch('/:id', loadIssue, function(req, res, next) {
 
   // Update properties present in the request body
   if (req.body.status !== undefined) {
-    req.issue.status = req.body.status;
+    if(checkStatus(req)){
+      req.issue.status = req.body.status;
+    }
   }
 
   if (req.body.description !== undefined) {
@@ -197,6 +199,17 @@ function loadIssue(req, res, next) {
     req.issue = issue;
     next();
   });
+}
+
+function checkStatus(req){
+  let oldStatus = req.issue.status;
+  let newStatus = req.body.status;
+
+  if(oldStatus == "completed" || oldStatus == "canceled" || newStatus == "new" || oldStatus == newStatus){
+    return false;
+  }else{
+    return true;
+  }
 }
 
 module.exports = router
